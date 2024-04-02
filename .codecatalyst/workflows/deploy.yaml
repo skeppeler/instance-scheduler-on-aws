@@ -30,6 +30,8 @@ Actions:
     Configuration:
       # Required - Steps are sequential instructions that run shell commands
       Steps:
+        - Run: pwd
+        - Run: ls -la
         - Run: yum install -y nodejs
         - Run: export AWS_DEFAULT_REGION=$LAUNCH_OPTIONS_region
         - Run: npx projen

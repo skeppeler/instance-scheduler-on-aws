@@ -29,6 +29,8 @@ landing page](https://aws.amazon.com/solutions/implementations/instance-schedule
 
 ## Deploying the Solution
 
+### [Launch with Amazon CodeCatalyst](https://codecatalyst.aws/launch?options=%7B%22sourceRepository%22%3A%22https%3A%2F%2Fgithub.com%2Faws-khargita%2Finstance-scheduler-on-aws%22%2C%22destinationRepositoryName%22%3A%22instance-scheduler-on-aws%22%2C%22environments%22%3A%5B%7B%22name%22%3A%22development%22%2C%22environmentType%22%3A%22Non-production%22%7D%5D%2C%22options%22%3A%5B%5B%22region%22%2C%22us-west-2%22%5D%5D%7D)
+
 ### One-Click Deploy From Amazon Web Services
 
 Refer to the [solution landing page](https://aws.amazon.com/solutions/implementations/instance-scheduler-on-aws/) to

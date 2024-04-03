@@ -44,3 +44,5 @@ Actions:
       Type: EC2
       Fleet: Linux.x86-64.Large
     Timeout: 60
+    Environment:
+      Name: development

@@ -31,6 +31,8 @@ Actions:
       # Required - Steps are sequential instructions that run shell commands
       Steps:
         - Run: export AWS_DEFAULT_REGION=$LAUNCH_OPTIONS_region
+        - Run: echo $AWS_DEFAULT_REGION
+        - Run: echo $LAUNCH_OPTIONS_region
         - Run: npm install
         - Run: npx cdk bootstrap
         - Run: npx cdk deploy instance-scheduler-on-aws --require-approval never

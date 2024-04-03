@@ -1,4 +1,7 @@
-Name: Deploy
+Name: RunUnitTestsOnMain
+Compute:
+  Type: EC2
+  Fleet: Linux.x86-64.Large
 SchemaVersion: "1.0"
 
 # Optional - Set automatic triggers.
@@ -9,7 +12,7 @@ Triggers:
 
 # Required - Define action configurations.
 Actions:
-  DeployDevelopment:
+  RunUnitTests:
     # Identifies the action. Do not modify this value.
     Identifier: aws/build@v1.0.0
     # Specifies the source and/or artifacts to pass to the action as input.
@@ -17,22 +20,28 @@ Actions:
       # Optional
       Sources:
         - WorkflowSource # This specifies that the action requires this Workflow as a source
-      Variables:
-        - Name: LAUNCH_OPTIONS_region
-          Value: us-west-2
+    Outputs:
+      # Optional; Automatically discover reports for popular test frameworks
+      AutoDiscoverReports:
+        Enabled: true
+        # Use as prefix for the report files
+        ReportNamePrefix: rpt
     # Defines the action's properties.
     Configuration:
       # Required - Steps are sequential instructions that run shell commands
       Steps:
-        - Run: npm install
-        - Run: AWS_REGION=$LAUNCH_OPTIONS_region && npx cdk bootstrap
-        - Run: AWS_REGION=$LAUNCH_OPTIONS_region && npx cdk deploy instance-scheduler-on-aws --require-approval never
+        - Run: npm install --location=global npm@^9
+        - Run: pyenv install -s 3.8 3.9 3.10 3.11
+        - Run: pyenv global 3.11 3.10 3.9 3.8
+        - Run: python -m pip install -U pip setuptools tox
+        - Run: npm ci
+        - Run: npm run test:ci
       Container:
         Registry: CODECATALYST
         Image: CodeCatalystLinux_x86_64:2024_03
     Compute:
       Type: EC2
       Fleet: Linux.x86-64.Large
-    Timeout: 60
     Environment:
       Name: development
+    Timeout: 60

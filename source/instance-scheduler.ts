@@ -28,6 +28,7 @@ function addAppStacks(app: App, props: AppProps): void {
     solutionVersion: props.solutionVersion,
     appregApplicationName: solutionDetails.appRegAppName,
     appregSolutionName: solutionDetails.appRegSolutionName,
+    disableOpMetrics: true,
   });
 
   new InstanceSchedulerRemoteStack(app, "instance-scheduler-on-aws-remote", {

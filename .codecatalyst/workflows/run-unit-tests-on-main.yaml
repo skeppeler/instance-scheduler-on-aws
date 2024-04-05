@@ -42,6 +42,8 @@ Actions:
         - WorkflowSource
     Configuration:
       Steps:
+        - Run: npm install --location=global npm@^9
+        - Run: npm ci
         - Run: npx cdk bootstrap
       Container:
         Registry: CODECATALYST
@@ -65,6 +67,8 @@ Actions:
         ReportNamePrefix: rpt
     Configuration:
       Steps:
+        - Run: npm install --location=global npm@^9
+        - Run: npm ci
         - Run: npx cdk deploy instance-scheduler-on-aws --context
             stackName=instance-scheduler-on-aws-test --parameters
             SchedulerFrequency=1 --parameters Namespace=e2etesting --parameters
@@ -92,6 +96,8 @@ Actions:
         ReportNamePrefix: rpt
     Configuration:
       Steps:
+        - Run: npm install --location=global npm@^9
+        - Run: npm ci
         - Run: npx cdk deploy instance-scheduler-on-aws-end-to-end-testing-resources
             --require-approval never
       Container:
@@ -116,6 +122,8 @@ Actions:
         ReportNamePrefix: rpt
     Configuration:
       Steps:
+        - Run: npm install --location=global npm@^9
+        - Run: npm ci
         - Run: npm run e2e-tests
       Container:
         Registry: CODECATALYST
@@ -128,6 +136,4 @@ Actions:
     DependsOn:
       - DeploySolution
       - DeployTestResources
-    Environment:
-      Name: development
     Timeout: 60

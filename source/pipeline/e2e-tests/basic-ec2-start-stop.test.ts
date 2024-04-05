@@ -3,13 +3,19 @@
 
 import * as ec2 from "@aws-sdk/client-ec2";
 
-import { resourceParams } from "./basic-ec2-start-stop.test.resources";
 import { delayMinutes } from "./index";
 import { getInstanceState } from "./utils/ec2-test-utils";
 import { createSchedule, currentTimePlus, toTimeStr } from "./utils/schedule-test-utils";
+import { CfnStackResourceFinder } from "./utils/cfn-utils";
 
 const ec2Client = new ec2.EC2Client({});
-const instanceId = resourceParams.ec2InstanceId;
+let instanceId: string;
+const startStopTestScheduleName = "ec2_basic_start_stop_test_schedule";
+
+beforeAll(async () => {
+  const cfnStackResourceFinder = await CfnStackResourceFinder.fromStackName("instance-scheduler-on-aws-end-to-end-testing-resources");
+  instanceId = cfnStackResourceFinder.findResourceByPartialId("basicstartstopinstance")?.PhysicalResourceId!;
+});
 
 test("instanceId exists", () => {
   expect(instanceId).not.toBeUndefined();
@@ -28,7 +34,7 @@ test("basic ec2 start-stop schedule", async () => {
 
   //create schedule
   await createSchedule({
-    name: resourceParams.startStopTestScheduleName,
+    name: startStopTestScheduleName,
     description: `testing schedule`,
     periods: [
       {

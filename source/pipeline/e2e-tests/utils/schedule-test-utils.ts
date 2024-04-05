@@ -2,10 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as dynamodb from "@aws-sdk/client-dynamodb";
-import { hubStackParams } from "./hub-stack-utils";
 import { AttributeValue } from "@aws-sdk/client-dynamodb";
+import { CfnStackResourceFinder } from "./cfn-utils";
 
-const configTableName = hubStackParams.configTableArn.substring(hubStackParams.configTableArn.lastIndexOf("/") + 1);
 export interface Period {
   name: string;
   description: string;
@@ -23,6 +22,8 @@ export interface Schedule {
 export async function createSchedule(schedule: Schedule) {
   const dynamoClient = new dynamodb.DynamoDBClient({});
   try {
+    const cfnStackResourceFinder = await CfnStackResourceFinder.fromStackName("instance-scheduler-on-aws");
+    const configTableName = cfnStackResourceFinder.findResourceByPartialId("ConfigTable")?.PhysicalResourceId!;
     await dynamoClient.send(
       new dynamodb.BatchWriteItemCommand({
         RequestItems: {

@@ -5,13 +5,19 @@ import * as ssm from "@aws-sdk/client-ssm";
 import { CreateMaintenanceWindowCommand, DeleteMaintenanceWindowCommand } from "@aws-sdk/client-ssm";
 import { createSchedule, currentTimePlus } from "./utils/schedule-test-utils";
 import * as ec2 from "@aws-sdk/client-ec2";
-import { resourceParams } from "./ec2-maintenance-window.test.resources";
 import { delayMinutes } from "./index";
 import { getInstanceState } from "./utils/ec2-test-utils";
+import { CfnStackResourceFinder } from "./utils/cfn-utils";
 
 const ssmClient = new ssm.SSMClient({});
 const ec2Client = new ec2.EC2Client({});
-const instanceId = resourceParams.ec2InstanceId;
+let instanceId: string;
+const maintWindowTestScheduleName = "ec2_maintenance_window_test_schedule";
+
+beforeAll(async () => {
+  const cfnStackResourceFinder = await CfnStackResourceFinder.fromStackName("instance-scheduler-on-aws-end-to-end-testing-resources");
+  instanceId = cfnStackResourceFinder.findResourceByPartialId("maintwindowstartinstance")?.PhysicalResourceId!;
+});
 
 function getCronStrForTime(time: Date) {
   return `cron(0 ${time.getUTCMinutes()} ${time.getUTCHours()} ? * *)`;
@@ -50,7 +56,7 @@ test("maintenance window start behavior", async () => {
   try {
     //create schedule
     await createSchedule({
-      name: resourceParams.maintWindowTestScheduleName,
+      name: maintWindowTestScheduleName,
       description: `testing schedule`,
       use_maintenance_window: true,
       ssm_maintenance_window: "test-window",

@@ -2,17 +2,24 @@
 // SPDX-License-Identifier: Apache-2.0
 import * as rds from "@aws-sdk/client-rds";
 
-import { resourceParams } from "./basic-rds-start-stop.test.resources";
 import { delayMinutes } from "./index";
 import { getInstanceState } from "./utils/rds-test-utils";
 import { createSchedule, currentTimePlus, toTimeStr } from "./utils/schedule-test-utils";
+import { CfnStackResourceFinder } from "./utils/cfn-utils";
 
 const rdsClient = new rds.RDSClient({});
+let rdsInstanceId: string;
+const taggedScheduleName = "rds_basic_start_stop_test_schedule";
+
+beforeAll(async () => {
+  const cfnStackResourceFinder = await CfnStackResourceFinder.fromStackName("instance-scheduler-on-aws-end-to-end-testing-resources");
+  rdsInstanceId = cfnStackResourceFinder.findResourceByPartialId("rdsbasicstartstop")?.PhysicalResourceId!;
+});
 
 test("rdsInstanceAccessible", async () => {
   const fetchResult = await rdsClient.send(
     new rds.DescribeDBInstancesCommand({
-      DBInstanceIdentifier: resourceParams.rdsInstanceId,
+      DBInstanceIdentifier: rdsInstanceId,
     }),
   );
 
@@ -20,12 +27,12 @@ test("rdsInstanceAccessible", async () => {
 });
 
 test("basic rds start-stop schedule", async () => {
-  const preTestState = await getInstanceState(rdsClient, resourceParams.rdsInstanceId);
+  const preTestState = await getInstanceState(rdsClient, rdsInstanceId);
   if (!["stopped", "stopping"].includes(preTestState)) {
     console.log(`instance in state ${preTestState} before test. Attempting to stop before running test...`);
     await rdsClient.send(
       new rds.StopDBInstanceCommand({
-        DBInstanceIdentifier: resourceParams.rdsInstanceId,
+        DBInstanceIdentifier: rdsInstanceId,
       }),
     );
     await delayMinutes(5);
@@ -33,7 +40,7 @@ test("basic rds start-stop schedule", async () => {
 
   //create test schedule
   await createSchedule({
-    name: resourceParams.taggedScheduleName,
+    name: taggedScheduleName,
     description: `testing schedule`,
     periods: [
       {
@@ -47,9 +54,9 @@ test("basic rds start-stop schedule", async () => {
 
   //confirm running during running period
   await delayMinutes(5);
-  expect(await getInstanceState(rdsClient, resourceParams.rdsInstanceId)).toBeOneOf(["available", "starting"]);
+  expect(await getInstanceState(rdsClient, rdsInstanceId)).toBeOneOf(["available", "starting"]);
 
   //confirm stopped after stop time
   await delayMinutes(4);
-  expect(await getInstanceState(rdsClient, resourceParams.rdsInstanceId)).toBeOneOf(["stopped", "stopping"]);
+  expect(await getInstanceState(rdsClient, rdsInstanceId)).toBeOneOf(["stopped", "stopping"]);
 }, 1_200_000);

@@ -73,6 +73,11 @@ Actions:
       Container:
         Registry: CODECATALYST
         Image: CodeCatalystLinux_x86_64:2024_03
+    Compute:
+      Type: EC2
+      Fleet: Linux.x86-64.Large
+    Environment:
+      Name: development
     DependsOn:
       - RunCdkBootstrap
     Timeout: 60
@@ -92,6 +97,11 @@ Actions:
       Container:
         Registry: CODECATALYST
         Image: CodeCatalystLinux_x86_64:2024_03
+    Compute:
+      Type: EC2
+      Fleet: Linux.x86-64.Large
+    Environment:
+      Name: development
     DependsOn:
       - RunCdkBootstrap
     Timeout: 60
@@ -110,6 +120,11 @@ Actions:
       Container:
         Registry: CODECATALYST
         Image: CodeCatalystLinux_x86_64:2024_03
+    Compute:
+      Type: EC2
+      Fleet: Linux.x86-64.Large
+    Environment:
+      Name: development
     DependsOn:
       - DeploySolution
       - DeployTestResources

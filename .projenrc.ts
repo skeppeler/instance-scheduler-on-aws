@@ -56,6 +56,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     "@aws-sdk/client-ec2",
     "@aws-sdk/client-rds",
     "@aws-sdk/client-ssm",
+    "@aws-sdk/client-cloudformation",
     "@aws-solutions-constructs/aws-lambda-dynamodb",
     "cdk-nag",
     "constructs",

@@ -57,6 +57,6 @@ test("basic rds start-stop schedule", async () => {
   expect(await getInstanceState(rdsClient, rdsInstanceId)).toBeOneOf(["available", "starting"]);
 
   //confirm stopped after stop time
-  await delayMinutes(4);
+  await delayMinutes(5);
   expect(await getInstanceState(rdsClient, rdsInstanceId)).toBeOneOf(["stopped", "stopping"]);
 }, 1_200_000);

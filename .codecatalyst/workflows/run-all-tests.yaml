@@ -61,6 +61,10 @@ Actions:
     Inputs:
       Sources:
         - WorkflowSource
+    Outputs:
+      AutoDiscoverReports:
+        Enabled: true
+        ReportNamePrefix: rpt
     Configuration:
       Steps:
         - Run: npm install --location=global npm@^9
@@ -86,6 +90,10 @@ Actions:
     Inputs:
       Sources:
         - WorkflowSource
+    Outputs:
+      AutoDiscoverReports:
+        Enabled: true
+        ReportNamePrefix: rpt
     Configuration:
       Steps:
         - Run: npm install --location=global npm@^9

@@ -1,4 +1,4 @@
-Name: RunUnitTestsOnMain
+Name: RunAllTests
 Compute:
   Type: EC2
   Fleet: Linux.x86-64.Large

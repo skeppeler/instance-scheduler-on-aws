@@ -51,6 +51,6 @@ test("basic ec2 start-stop schedule", async () => {
   expect(await getInstanceState(ec2Client, instanceId)).toBe(ec2.InstanceStateName.running);
 
   //confirm stopped after stop time
-  await delayMinutes(4);
+  await delayMinutes(5);
   expect(await getInstanceState(ec2Client, instanceId)).toBe(ec2.InstanceStateName.stopped);
 }, 900_000);

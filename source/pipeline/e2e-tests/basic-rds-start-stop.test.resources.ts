@@ -22,6 +22,8 @@ export class BasicRdsStartStopTestResources implements TestResourceProvider {
     const rdsInstance = new rds.DatabaseInstance(scope, "rds-basic-start-stop", {
       engine: rds.DatabaseInstanceEngine.POSTGRES,
       vpc: defaultTestVPC(scope),
+      backupRetention: cdk.Duration.days(0),
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
     cdk.Tags.of(rdsInstance).add("Schedule", resourceParams.taggedScheduleName);

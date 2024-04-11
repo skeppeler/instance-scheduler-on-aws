@@ -15,10 +15,10 @@ Actions:
           Value: us-west-2
     Configuration:
       Steps:
-        - Run: npm install
-        - Run: AWS_REGION=$LAUNCH_OPTIONS_region && npx cdk bootstrap
-        - Run: AWS_REGION=$LAUNCH_OPTIONS_region && npx cdk deploy
-            instance-scheduler-on-aws --require-approval never
+        - Run: export AWS_REGION=$LAUNCH_OPTIONS_region
+        - Run: npm ci
+        - Run: npx cdk bootstrap
+        - Run: npx cdk deploy instance-scheduler-on-aws --require-approval never
       Container:
         Registry: CODECATALYST
         Image: CodeCatalystLinux_x86_64:2024_03

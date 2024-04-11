@@ -82,17 +82,18 @@ Actions:
     Inputs:
       Sources:
         - WorkflowSource
+      Variables:
+        - Name: LAUNCH_OPTIONS_region
+          Value: us-west-2
     Configuration:
       Steps:
+        - Run: export AWS_REGION=$LAUNCH_OPTIONS_region
         - Run: npm ci --cache .npm
         - Run: npx --cache .npm cdk bootstrap
       Container:
         Registry: CODECATALYST
         Image: CodeCatalystLinux_x86_64:2024_03
     Environment:
-      Connections:
-        - Role: CodeCatalystWorkflowDevelopmentRole-khargita
-          Name: "682718573004"
       Name: development
     Timeout: 60
     DependsOn:
@@ -108,8 +109,12 @@ Actions:
         Inputs:
           Sources:
             - WorkflowSource
+          Variables:
+            - Name: LAUNCH_OPTIONS_region
+              Value: us-west-2
         Configuration:
           Steps:
+            - Run: export AWS_REGION=$LAUNCH_OPTIONS_region
             - Run: npm ci --cache .npm
             - Run: npx --cache .npm cdk deploy instance-scheduler-on-aws --context
                 stackName=instance-scheduler-on-aws-test --parameters
@@ -121,9 +126,6 @@ Actions:
             Registry: CODECATALYST
             Image: CodeCatalystLinux_x86_64:2024_03
         Environment:
-          Connections:
-            - Role: CodeCatalystWorkflowDevelopmentRole-khargita
-              Name: "682718573004"
           Name: development
         Timeout: 60
         Caching:
@@ -135,8 +137,12 @@ Actions:
         Inputs:
           Sources:
             - WorkflowSource
+          Variables:
+            - Name: LAUNCH_OPTIONS_region
+              Value: us-west-2
         Configuration:
           Steps:
+            - Run: export AWS_REGION=$LAUNCH_OPTIONS_region
             - Run: npm ci --cache .npm
             - Run: npx --cache .npm cdk deploy
                 instance-scheduler-on-aws-end-to-end-testing-resources
@@ -145,9 +151,6 @@ Actions:
             Registry: CODECATALYST
             Image: CodeCatalystLinux_x86_64:2024_03
         Environment:
-          Connections:
-            - Role: CodeCatalystWorkflowDevelopmentRole-khargita
-              Name: "682718573004"
           Name: development
         Timeout: 60
         Caching:
@@ -162,21 +165,22 @@ Actions:
     Inputs:
       Sources:
         - WorkflowSource
+      Variables:
+        - Name: LAUNCH_OPTIONS_region
+          Value: us-west-2
     Outputs:
       AutoDiscoverReports:
         Enabled: true
         ReportNamePrefix: rpt
     Configuration:
       Steps:
+        - Run: export AWS_REGION=$LAUNCH_OPTIONS_region
         - Run: npm ci --cache .npm
         - Run: npm run e2e-tests
       Container:
         Registry: CODECATALYST
         Image: CodeCatalystLinux_x86_64:2024_03
     Environment:
-      Connections:
-        - Role: CodeCatalystWorkflowDevelopmentRole-khargita
-          Name: "682718573004"
       Name: development
     DependsOn:
       - Deploy

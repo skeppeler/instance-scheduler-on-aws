@@ -53,6 +53,10 @@ export class BasicRdsStartStopTestResources implements TestResourceProvider {
         id: "AwsSolutions-SMG4",
         reason: "Short-lived test instance with no need for secrets rotation",
       },
+      {
+        id: "AwsSolutions-RDS13",
+        reason: "Test instance with no content, no need for backups",
+      },
     ]);
 
     NagSuppressions.addResourceSuppressions(

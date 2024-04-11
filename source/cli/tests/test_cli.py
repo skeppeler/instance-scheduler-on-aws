@@ -4,12 +4,12 @@ from cli_test_helpers import shell
 
 
 def test_cli_entrypoint_exists() -> None:
-    result = shell("scheduler-cli --help")
+    result = shell("python -m instance_scheduler_cli --help")
     assert result.exit_code == 0
 
 
 def test_calling_with_no_args_exits_gracefully() -> None:
-    result = shell("scheduler-cli")
+    result = shell("python -m instance_scheduler_cli")
     assert result.exit_code == 0
 
 

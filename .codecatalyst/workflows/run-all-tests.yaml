@@ -90,6 +90,9 @@ Actions:
         Registry: CODECATALYST
         Image: CodeCatalystLinux_x86_64:2024_03
     Environment:
+      Connections:
+        - Role: CodeCatalystWorkflowDevelopmentRole-khargita
+          Name: "682718573004"
       Name: development
     Timeout: 60
     DependsOn:
@@ -118,6 +121,9 @@ Actions:
             Registry: CODECATALYST
             Image: CodeCatalystLinux_x86_64:2024_03
         Environment:
+          Connections:
+            - Role: CodeCatalystWorkflowDevelopmentRole-khargita
+              Name: "682718573004"
           Name: development
         Timeout: 60
         Caching:
@@ -132,12 +138,16 @@ Actions:
         Configuration:
           Steps:
             - Run: npm ci --cache .npm
-            - Run: npx --cache .npm cdk deploy instance-scheduler-on-aws-end-to-end-testing-resources
+            - Run: npx --cache .npm cdk deploy
+                instance-scheduler-on-aws-end-to-end-testing-resources
                 --require-approval never
           Container:
             Registry: CODECATALYST
             Image: CodeCatalystLinux_x86_64:2024_03
         Environment:
+          Connections:
+            - Role: CodeCatalystWorkflowDevelopmentRole-khargita
+              Name: "682718573004"
           Name: development
         Timeout: 60
         Caching:
@@ -164,6 +174,9 @@ Actions:
         Registry: CODECATALYST
         Image: CodeCatalystLinux_x86_64:2024_03
     Environment:
+      Connections:
+        - Role: CodeCatalystWorkflowDevelopmentRole-khargita
+          Name: "682718573004"
       Name: development
     DependsOn:
       - Deploy

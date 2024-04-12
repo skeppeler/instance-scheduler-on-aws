@@ -8,28 +8,6 @@ Triggers:
     Branches:
       - main
 Actions:
-  InstallDependencies:
-    Identifier: aws/build@v1.0.0
-    Inputs:
-      Sources:
-        - WorkflowSource
-    Outputs:
-      AutoDiscoverReports:
-        Enabled: true
-        ReportNamePrefix: rpt
-    Configuration:
-      Steps:
-        - Run: npm ci --cache .npm
-      Container:
-        Registry: CODECATALYST
-        Image: CodeCatalystLinux_x86_64:2024_03
-    Environment:
-      Name: development
-    Timeout: 60
-    Caching:
-      FileCaching:
-        npm-cache:
-          Path: .npm
   RunUnitTests:
     Actions:
       RunCdkTests:
@@ -38,12 +16,22 @@ Actions:
           Sources:
             - WorkflowSource
         Outputs:
-          AutoDiscoverReports:
-            Enabled: true
-            ReportNamePrefix: rpt
+          Reports:
+            CDKTestReport:
+              SuccessCriteria:
+                PassRate: 100
+              IncludePaths:
+                - deployment/test-reports/cdk-test-report.xml
+              Format: JUNITXML
+            CDKCoverageReport:
+              SuccessCriteria:
+                LineCoverage: 80
+              IncludePaths:
+                - deployment/coverage-reports/cdk-coverage/clover.xml
+              Format: CLOVERXML
         Configuration:
           Steps:
-            - Run: npm ci --cache .npm
+            - Run: npm ci
             - Run: npm run test:cdk:ci
           Container:
             Registry: CODECATALYST
@@ -51,19 +39,25 @@ Actions:
         Environment:
           Name: development
         Timeout: 60
-        Caching:
-          FileCaching:
-            npm-cache:
-              Path: .npm
       RunLambdaTests:
         Identifier: aws/managed-test@v1.0.0
         Inputs:
           Sources:
             - WorkflowSource
         Outputs:
-          AutoDiscoverReports:
-            Enabled: true
-            ReportNamePrefix: rpt
+          Reports:
+            LambdaTestReport:
+              SuccessCriteria:
+                PassRate: 100
+              IncludePaths:
+                - deployment/test-reports/lambda-test-report.xml
+              Format: JUNITXML
+            LambdaTestCoverage:
+              Format: COBERTURAXML
+              IncludePaths:
+                - deployment/coverage-reports/lambda-coverage.xml
+              SuccessCriteria:
+                LineCoverage: 80
         Configuration:
           Steps:
             - Run: python --version
@@ -75,8 +69,6 @@ Actions:
         Environment:
           Name: development
         Timeout: 60
-    DependsOn:
-      - InstallDependencies
   RunCdkBootstrap:
     Identifier: aws/build@v1.0.0
     Inputs:
@@ -88,20 +80,14 @@ Actions:
     Configuration:
       Steps:
         - Run: export AWS_REGION=$LAUNCH_OPTIONS_region
-        - Run: npm ci --cache .npm
-        - Run: npx --cache .npm cdk bootstrap
+        - Run: npm ci
+        - Run: npx cdk bootstrap
       Container:
         Registry: CODECATALYST
         Image: CodeCatalystLinux_x86_64:2024_03
     Environment:
       Name: development
     Timeout: 60
-    DependsOn:
-      - InstallDependencies
-    Caching:
-      FileCaching:
-        npm-cache:
-          Path: .npm
   Deploy:
     Actions:
       DeploySolution:
@@ -115,8 +101,8 @@ Actions:
         Configuration:
           Steps:
             - Run: export AWS_REGION=$LAUNCH_OPTIONS_region
-            - Run: npm ci --cache .npm
-            - Run: npx --cache .npm cdk deploy instance-scheduler-on-aws --context
+            - Run: npm ci
+            - Run: npx cdk deploy instance-scheduler-on-aws --context
                 stackName=instance-scheduler-on-aws-test --parameters
                 SchedulerFrequency=1 --parameters Namespace=e2etesting
                 --parameters ScheduledServices=Both --parameters
@@ -128,10 +114,6 @@ Actions:
         Environment:
           Name: development
         Timeout: 60
-        Caching:
-          FileCaching:
-            npm-cache:
-              Path: .npm
       DeployTestResources:
         Identifier: aws/build@v1.0.0
         Inputs:
@@ -143,9 +125,8 @@ Actions:
         Configuration:
           Steps:
             - Run: export AWS_REGION=$LAUNCH_OPTIONS_region
-            - Run: npm ci --cache .npm
-            - Run: npx --cache .npm cdk deploy
-                instance-scheduler-on-aws-end-to-end-testing-resources
+            - Run: npm ci
+            - Run: npx cdk deploy instance-scheduler-on-aws-end-to-end-testing-resources
                 --require-approval never
           Container:
             Registry: CODECATALYST
@@ -153,10 +134,6 @@ Actions:
         Environment:
           Name: development
         Timeout: 60
-        Caching:
-          FileCaching:
-            npm-cache:
-              Path: .npm
     DependsOn:
       - RunUnitTests
       - RunCdkBootstrap
@@ -169,13 +146,17 @@ Actions:
         - Name: LAUNCH_OPTIONS_region
           Value: us-west-2
     Outputs:
-      AutoDiscoverReports:
-        Enabled: true
-        ReportNamePrefix: rpt
+      Reports:
+        E2ETestReport:
+          Format: JUNITXML
+          IncludePaths:
+            - deployment/test-reports/e2e-test-report.xml
+          SuccessCriteria:
+            PassRate: 100
     Configuration:
       Steps:
         - Run: export AWS_REGION=$LAUNCH_OPTIONS_region
-        - Run: npm ci --cache .npm
+        - Run: npm ci
         - Run: npm run e2e-tests
       Container:
         Registry: CODECATALYST
@@ -185,7 +166,3 @@ Actions:
     DependsOn:
       - Deploy
     Timeout: 60
-    Caching:
-      FileCaching:
-        npm-cache:
-          Path: .npm

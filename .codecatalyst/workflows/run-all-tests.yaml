@@ -8,6 +8,39 @@ Triggers:
     Branches:
       - main
 Actions:
+  RunDependencyAudits:
+    Actions:
+      RunNpmAudit:
+        Identifier: aws/managed-test@v1.0.0
+        Inputs:
+          Sources:
+            - WorkflowSource
+        Configuration:
+          Steps:
+            - Run: npm audit --audit-level=high
+          Container:
+            Registry: CODECATALYST
+            Image: CodeCatalystLinux_x86_64:2024_03
+        Environment:
+          Name: development
+        Timeout: 60
+      RunPipAudit:
+        Identifier: aws/managed-test@v1.0.0
+        Inputs:
+          Sources:
+            - WorkflowSource
+        Configuration:
+          Steps:
+            - Run: pip install -U pip-audit poetry
+            - Run: cd source/app
+            - Run: poetry export -f requirements.txt --output requirements.txt
+            - Run: pip-audit -r requirements.txt
+          Container:
+            Registry: CODECATALYST
+            Image: CodeCatalystLinux_x86_64:2024_03
+        Environment:
+          Name: development
+        Timeout: 60
   RunUnitTests:
     Actions:
       RunCdkTests:
@@ -69,27 +102,27 @@ Actions:
         Environment:
           Name: development
         Timeout: 60
-  RunCdkBootstrap:
-    Identifier: aws/build@v1.0.0
-    Inputs:
-      Sources:
-        - WorkflowSource
-      Variables:
-        - Name: LAUNCH_OPTIONS_region
-          Value: us-west-2
-    Configuration:
-      Steps:
-        - Run: export AWS_REGION=$LAUNCH_OPTIONS_region
-        - Run: npm ci
-        - Run: npx cdk bootstrap
-      Container:
-        Registry: CODECATALYST
-        Image: CodeCatalystLinux_x86_64:2024_03
-    Environment:
-      Name: development
-    Timeout: 60
   Deploy:
     Actions:
+      RunCdkBootstrap:
+        Identifier: aws/build@v1.0.0
+        Inputs:
+          Sources:
+            - WorkflowSource
+          Variables:
+            - Name: LAUNCH_OPTIONS_region
+              Value: us-west-2
+        Configuration:
+          Steps:
+            - Run: export AWS_REGION=$LAUNCH_OPTIONS_region
+            - Run: npm ci
+            - Run: npx cdk bootstrap
+          Container:
+            Registry: CODECATALYST
+            Image: CodeCatalystLinux_x86_64:2024_03
+        Environment:
+          Name: development
+        Timeout: 60
       DeploySolution:
         Identifier: aws/build@v1.0.0
         Inputs:
@@ -114,6 +147,8 @@ Actions:
         Environment:
           Name: development
         Timeout: 60
+        DependsOn:
+          - RunCdkBootstrap
       DeployTestResources:
         Identifier: aws/build@v1.0.0
         Inputs:
@@ -134,9 +169,11 @@ Actions:
         Environment:
           Name: development
         Timeout: 60
+        DependsOn:
+          - RunCdkBootstrap
     DependsOn:
       - RunUnitTests
-      - RunCdkBootstrap
+      - RunDependencyAudits
   RunE2ETests:
     Identifier: aws/managed-test@v1.0.0
     Inputs:

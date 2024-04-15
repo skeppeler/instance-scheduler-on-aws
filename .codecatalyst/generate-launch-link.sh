@@ -156,6 +156,7 @@ node -e 'console.log(
         },
         {
           key: "Regions",
+          value: "us-west-2",
           displayType: "string",
           displayName: "Regions",
           description: "List of regions in which instances should be scheduled, leave blank for current region only."

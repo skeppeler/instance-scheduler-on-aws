@@ -30,6 +30,8 @@ Actions:
     Configuration:
       Steps:
         - Run: export AWS_REGION=$LAUNCH_OPTIONS_AWS_REGION
+        - Run: echo $AWS_REGION
+        - Run: echo $LAUNCH_OPTIONS_Principals
         - Run: npm ci
         - Run: npx cdk bootstrap
         - Run:

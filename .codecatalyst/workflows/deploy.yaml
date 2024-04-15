@@ -18,15 +18,15 @@ Actions:
         - Name: LAUNCH_OPTIONS_CreateRdsSnapshot
         - Name: LAUNCH_OPTIONS_MemorySize
         - Name: LAUNCH_OPTIONS_UseCloudWatchMetrics
+        - Name: LAUNCH_OPTIONS_LogRetentionDays
         - Name: LAUNCH_OPTIONS_Trace
         - Name: LAUNCH_OPTIONS_EnableSSMMaintenanceWindows
         - Name: LAUNCH_OPTIONS_DefaultTimezone
-        - Name: LAUNCH_OPTIONS_UsingAWSOrganizations
+        - Name: LAUNCH_OPTIONS_Regions
         - Name: LAUNCH_OPTIONS_UsingAWSOrganizations
         - Name: LAUNCH_OPTIONS_Principals
         - Name: LAUNCH_OPTIONS_Namespace
         - Name: LAUNCH_OPTIONS_SchedulerFrequency
-        - Name: LAUNCH_OPTIONS_ScheduleLambdaAccount
     Configuration:
       Steps:
         - Run: export AWS_REGION=$LAUNCH_OPTIONS_AWS_REGION
@@ -40,6 +40,7 @@ Actions:
             --parameters CreateRdsSnapshot="$LAUNCH_OPTIONS_CreateRdsSnapshot" \
             --parameters MemorySize="$LAUNCH_OPTIONS_MemorySize" \
             --parameters UseCloudWatchMetrics="$LAUNCH_OPTIONS_UseCloudWatchMetrics" \
+            --parameters LogRetentionDays="$LAUNCH_OPTIONS_LogRetentionDays" \
             --parameters Trace="$LAUNCH_OPTIONS_Trace" \
             --parameters EnableSSMMaintenanceWindows="$LAUNCH_OPTIONS_EnableSSMMaintenanceWindows" \
             --parameters DefaultTimezone="$LAUNCH_OPTIONS_DefaultTimezone" \
@@ -47,8 +48,7 @@ Actions:
             --parameters UsingAWSOrganizations="$LAUNCH_OPTIONS_UsingAWSOrganizations" \
             --parameters Principals="$LAUNCH_OPTIONS_Principals" \
             --parameters Namespace="$LAUNCH_OPTIONS_Namespace" \
-            --parameters SchedulerFrequency="$LAUNCH_OPTIONS_SchedulerFrequency" \
-            --parameters ScheduleLambdaAccount="$LAUNCH_OPTIONS_ScheduleLambdaAccount"
+            --parameters SchedulerFrequency="$LAUNCH_OPTIONS_SchedulerFrequency"
       Container:
         Registry: CODECATALYST
         Image: CodeCatalystLinux_x86_64:2024_03

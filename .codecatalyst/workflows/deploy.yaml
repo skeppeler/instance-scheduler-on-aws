@@ -5,7 +5,7 @@ Triggers:
     Branches:
       - main
 Actions:
-  DeployDevelopment:
+  Deploy:
     Identifier: aws/build@v1.0.0
     Inputs:
       Sources:

@@ -186,6 +186,7 @@ node -e 'console.log(
         },
         {
           key: "SchedulerFrequency",
+          value: 5,
           displayType: "number",
           displayName: "Scheduler Frequency",
           description: "Scheduler running frequency in minutes."

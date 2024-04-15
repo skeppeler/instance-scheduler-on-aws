@@ -18,23 +18,23 @@ Actions:
         - Run: export AWS_REGION=$LAUNCH_OPTIONS_region
         - Run: npm ci
         - Run: npx cdk bootstrap
-        - Run: |
-          npx cdk deploy instance-scheduler-on-aws --require-approval never \
-          --parameters SchedulingActive="$LAUNCH_OPTIONS_SchedulingActive" \
-          --parameters ScheduledServices="$LAUNCH_OPTIONS_ScheduledServices" \
-          --parameters ScheduleRdsClusters="$LAUNCH_OPTIONS_ScheduleRdsClusters" \
-          --parameters CreateRdsSnapshot="$LAUNCH_OPTIONS_CreateRdsSnapshot" \
-          --parameters MemorySize="$LAUNCH_OPTIONS_MemorySize" \
-          --parameters UseCloudWatchMetrics="$LAUNCH_OPTIONS_UseCloudWatchMetrics" \
-          --parameters Trace="$LAUNCH_OPTIONS_Trace" \
-          --parameters EnableSSMMaintenanceWindows="$LAUNCH_OPTIONS_EnableSSMMaintenanceWindows" \
-          --parameters DefaultTimezone="$LAUNCH_OPTIONS_DefaultTimezone" \
-          --parameters Regions="$LAUNCH_OPTIONS_Regions" \
-          --parameters UsingAWSOrganizations="$LAUNCH_OPTIONS_UsingAWSOrganizations" \
-          --parameters Principals="$LAUNCH_OPTIONS_Principals" \
-          --parameters Namespace="$LAUNCH_OPTIONS_Namespace" \
-          --parameters SchedulerFrequency="$LAUNCH_OPTIONS_SchedulerFrequency" \
-          --parameters ScheduleLambdaAccount="$LAUNCH_OPTIONS_ScheduleLambdaAccount"
+        - Run:
+            npx cdk deploy instance-scheduler-on-aws --require-approval never \
+            --parameters SchedulingActive="$LAUNCH_OPTIONS_SchedulingActive" \
+            --parameters ScheduledServices="$LAUNCH_OPTIONS_ScheduledServices" \
+            --parameters ScheduleRdsClusters="$LAUNCH_OPTIONS_ScheduleRdsClusters" \
+            --parameters CreateRdsSnapshot="$LAUNCH_OPTIONS_CreateRdsSnapshot" \
+            --parameters MemorySize="$LAUNCH_OPTIONS_MemorySize" \
+            --parameters UseCloudWatchMetrics="$LAUNCH_OPTIONS_UseCloudWatchMetrics" \
+            --parameters Trace="$LAUNCH_OPTIONS_Trace" \
+            --parameters EnableSSMMaintenanceWindows="$LAUNCH_OPTIONS_EnableSSMMaintenanceWindows" \
+            --parameters DefaultTimezone="$LAUNCH_OPTIONS_DefaultTimezone" \
+            --parameters Regions="$LAUNCH_OPTIONS_Regions" \
+            --parameters UsingAWSOrganizations="$LAUNCH_OPTIONS_UsingAWSOrganizations" \
+            --parameters Principals="$LAUNCH_OPTIONS_Principals" \
+            --parameters Namespace="$LAUNCH_OPTIONS_Namespace" \
+            --parameters SchedulerFrequency="$LAUNCH_OPTIONS_SchedulerFrequency" \
+            --parameters ScheduleLambdaAccount="$LAUNCH_OPTIONS_ScheduleLambdaAccount"
       Container:
         Registry: CODECATALYST
         Image: CodeCatalystLinux_x86_64:2024_03

@@ -18,7 +18,7 @@ Actions:
         - Run: export AWS_REGION=$LAUNCH_OPTIONS_region
         - Run: npm ci
         - Run: npx cdk bootstrap
-        - Run: 
+        - Run: |
           npx cdk deploy instance-scheduler-on-aws --require-approval never \
           --parameters SchedulingActive="$LAUNCH_OPTIONS_SchedulingActive" \
           --parameters ScheduledServices="$LAUNCH_OPTIONS_ScheduledServices" \

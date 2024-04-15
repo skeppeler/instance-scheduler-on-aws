@@ -11,11 +11,25 @@ Actions:
       Sources:
         - WorkflowSource
       Variables:
-        - Name: LAUNCH_OPTIONS_region
-          Value: us-west-2
+        - Name: LAUNCH_OPTIONS_AWS_REGION
+        - Name: LAUNCH_OPTIONS_SchedulingActive
+        - Name: LAUNCH_OPTIONS_ScheduledServices
+        - Name: LAUNCH_OPTIONS_ScheduleRdsClusters
+        - Name: LAUNCH_OPTIONS_CreateRdsSnapshot
+        - Name: LAUNCH_OPTIONS_MemorySize
+        - Name: LAUNCH_OPTIONS_UseCloudWatchMetrics
+        - Name: LAUNCH_OPTIONS_Trace
+        - Name: LAUNCH_OPTIONS_EnableSSMMaintenanceWindows
+        - Name: LAUNCH_OPTIONS_DefaultTimezone
+        - Name: LAUNCH_OPTIONS_UsingAWSOrganizations
+        - Name: LAUNCH_OPTIONS_UsingAWSOrganizations
+        - Name: LAUNCH_OPTIONS_Principals
+        - Name: LAUNCH_OPTIONS_Namespace
+        - Name: LAUNCH_OPTIONS_SchedulerFrequency
+        - Name: LAUNCH_OPTIONS_ScheduleLambdaAccount
     Configuration:
       Steps:
-        - Run: export AWS_REGION=$LAUNCH_OPTIONS_region
+        - Run: export AWS_REGION=$LAUNCH_OPTIONS_AWS_REGION
         - Run: npm ci
         - Run: npx cdk bootstrap
         - Run:

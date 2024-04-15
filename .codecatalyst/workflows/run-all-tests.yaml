@@ -110,11 +110,10 @@ Actions:
           Sources:
             - WorkflowSource
           Variables:
-            - Name: LAUNCH_OPTIONS_region
-              Value: us-west-2
+            - Name: LAUNCH_OPTIONS_AWS_REGION
         Configuration:
           Steps:
-            - Run: export AWS_REGION=$LAUNCH_OPTIONS_region
+            - Run: export AWS_REGION=$LAUNCH_OPTIONS_AWS_REGION
             - Run: npm ci
             - Run: npx cdk bootstrap
           Container:
@@ -129,11 +128,10 @@ Actions:
           Sources:
             - WorkflowSource
           Variables:
-            - Name: LAUNCH_OPTIONS_region
-              Value: us-west-2
+            - Name: LAUNCH_OPTIONS_AWS_REGION
         Configuration:
           Steps:
-            - Run: export AWS_REGION=$LAUNCH_OPTIONS_region
+            - Run: export AWS_REGION=$LAUNCH_OPTIONS_AWS_REGION
             - Run: npm ci
             - Run: npx cdk deploy instance-scheduler-on-aws --context
                 stackName=instance-scheduler-on-aws-test --parameters
@@ -155,11 +153,10 @@ Actions:
           Sources:
             - WorkflowSource
           Variables:
-            - Name: LAUNCH_OPTIONS_region
-              Value: us-west-2
+            - Name: LAUNCH_OPTIONS_AWS_REGION
         Configuration:
           Steps:
-            - Run: export AWS_REGION=$LAUNCH_OPTIONS_region
+            - Run: export AWS_REGION=$LAUNCH_OPTIONS_AWS_REGION
             - Run: npm ci
             - Run: npx cdk deploy instance-scheduler-on-aws-end-to-end-testing-resources
                 --require-approval never
@@ -180,8 +177,7 @@ Actions:
       Sources:
         - WorkflowSource
       Variables:
-        - Name: LAUNCH_OPTIONS_region
-          Value: us-west-2
+        - Name: LAUNCH_OPTIONS_AWS_REGION
     Outputs:
       Reports:
         E2ETestReport:
@@ -192,7 +188,7 @@ Actions:
             PassRate: 100
     Configuration:
       Steps:
-        - Run: export AWS_REGION=$LAUNCH_OPTIONS_region
+        - Run: export AWS_REGION=$LAUNCH_OPTIONS_AWS_REGION
         - Run: npm ci
         - Run: npm run e2e-tests
       Container:

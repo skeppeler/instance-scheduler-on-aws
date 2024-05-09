@@ -1,3 +1,5 @@
+adding some new lines
+
 # Instance Scheduler on AWS
 
 The Instance Scheduler on AWS solution automates the starting and stopping of Amazon Elastic Compute Cloud (Amazon EC2)

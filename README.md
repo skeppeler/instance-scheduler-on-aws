@@ -1,4 +1,4 @@
-# Instance Scheduler on AWS
+# Instance Scheduler on AWS!
 
 The Instance Scheduler on AWS solution automates the starting and stopping of Amazon Elastic Compute Cloud (Amazon EC2)
 and Amazon Relational Database Service (Amazon RDS) instances.
